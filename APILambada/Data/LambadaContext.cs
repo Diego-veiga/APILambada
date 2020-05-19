@@ -1,4 +1,5 @@
-﻿using APILambada.Model;
+﻿using APILambada.Data.ConfigurationModel;
+using APILambada.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace APILambada.Data
@@ -14,6 +15,8 @@ namespace APILambada.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new TencnicoConfiguration());
+            modelBuilder.ApplyConfiguration(new LambadaConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }
