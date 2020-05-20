@@ -8,6 +8,7 @@ namespace APILambada.Data
     {
         public DbSet<Tecnico> Tecnico { get; set; }
         public DbSet<Lambada> Lambada { get; set; }
+        public DbSet<Usuarios> Usuarios { get; set; }
         public LambadaContext(DbContextOptions<LambadaContext> options):base(options)
         {
            
@@ -17,6 +18,7 @@ namespace APILambada.Data
         {
             modelBuilder.ApplyConfiguration(new TencnicoConfiguration());
             modelBuilder.ApplyConfiguration(new LambadaConfiguration());
+            modelBuilder.ApplyConfiguration(new UsuarioConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }
