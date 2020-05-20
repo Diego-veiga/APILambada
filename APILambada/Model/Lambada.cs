@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace APILambada.Model
 {
@@ -13,6 +9,6 @@ namespace APILambada.Model
         public string Descricao { get; set; }
         public DateTime DataLambada { get; set; }
         public int TecnicoId { get; set; }
-        public virtual Tecnico Tecnico { get; set; }
+        public  Tecnico Tecnico { get; set; }
     }
 }
