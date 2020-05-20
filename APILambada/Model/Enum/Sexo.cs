@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace APILambada.Model.Enum
+﻿namespace APILambada.Model.Enum
 {
-    public enum Sexo
+    public enum Sexo:int
     {
         Masculino=1,
-        Ferminino=2
+        Ferminino=2,
     }
 }
