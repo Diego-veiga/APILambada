@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using APILambada.Data;
 using APILambada.Model;
 using APILambada.Model.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace APILambada.Controllers
     {
         [HttpGet]
         [Route("")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Tecnico>>> TodosTencicos([FromServices]LambadaContext context)
         {
             try
@@ -30,6 +32,7 @@ namespace APILambada.Controllers
         }
         [HttpGet]
         [Route("{id:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Tecnico>> TecnicoPorId(int id, [FromServices]LambadaContext context)
         {
             try
@@ -50,6 +53,7 @@ namespace APILambada.Controllers
         }
         [HttpPost]
         [Route("")]
+        [Authorize(Roles ="Funcionario")]
         public async Task<ActionResult<Tecnico>>CadastraTecnico([FromBody]Tecnico model, [FromServices]LambadaContext context)
         {
             if (!ModelState.IsValid)
@@ -74,6 +78,7 @@ namespace APILambada.Controllers
         }
         [Route("{id:int}")]
         [HttpPut]
+        [Authorize(Roles = "Gerente")]
         public async Task<ActionResult<Tecnico>>AtualizarTecnico([FromServices]LambadaContext context,[FromBody]Tecnico model, int id)
         {
             if (model.Id != id)
@@ -103,6 +108,7 @@ namespace APILambada.Controllers
         }
         [Route("{id:int}")]
         [HttpDelete]
+        [Authorize(Roles = "Gerente")]
         public async Task<ActionResult<Tecnico>>DeletarTecncio(int id, [FromServices]LambadaContext context)
         {
             var tecnico = await context.Tecnico.FirstOrDefaultAsync(x => x.Id == id);

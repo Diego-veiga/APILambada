@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using APILambada.Data;
 using APILambada.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace APILambada.Controllers
     {
         [Route("")]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Lambada>>> Listadelamabda([FromServices]LambadaContext context)
         {
             try
@@ -32,6 +34,7 @@ namespace APILambada.Controllers
         }
         [Route("{id:int}")]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<Lambada>> LambadaPorId(int id, [FromServices]LambadaContext context)
         {
             try
@@ -52,6 +55,7 @@ namespace APILambada.Controllers
         }
         [Route("Tecnico/{id:int}")]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Lambada>>> LambadaPorTecncico(int id, [FromServices]LambadaContext context)
         {
             try
@@ -71,8 +75,7 @@ namespace APILambada.Controllers
         }
         [Route("")]
         [HttpPost]
-      
-
+        [Authorize(Roles ="Funcionario")]
         public async Task<ActionResult<Lambada>> CadastroLambada([FromServices]LambadaContext context, [FromBody]Lambada model)
         {
             if (!ModelState.IsValid)
@@ -94,6 +97,7 @@ namespace APILambada.Controllers
         }
         [Route("{id:int}")]
         [HttpPut]
+        [Authorize(Roles ="Funcionario")]
         
         public async Task<ActionResult<Lambada>> AlterarLambada(int id, [FromServices]LambadaContext context, [FromBody]Lambada model)
         {
@@ -120,6 +124,7 @@ namespace APILambada.Controllers
         }
         [Route("{id:int}")]
         [HttpDelete]
+        [Authorize(Roles ="Gerente")]
         public async Task<ActionResult<Lambada>>DeletaLambada(int id, [FromServices]LambadaContext context)
         {
             try

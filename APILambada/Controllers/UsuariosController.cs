@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using APILambada.Data;
 using APILambada.Model;
+using APILambada.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +17,13 @@ namespace APILambada.Controllers
     {
         [Route("")]
         [HttpGet]
+        [Authorize(Roles ="Gerente")]
         public async Task<ActionResult<List<Usuarios>>> ListaUsuarios([FromServices]LambadaContext context)
         {
             try
             {
                 var usuarios = await context.Usuarios.AsNoTracking().ToListAsync();
+                
                 return usuarios;
             }
             catch (Exception)
@@ -29,6 +33,7 @@ namespace APILambada.Controllers
         }
         [Route("{id:int}")]
         [HttpGet]
+        [Authorize(Roles ="Gerente")]
         public async Task<ActionResult<Usuarios>> UsuarioPorId(int id, [FromServices]LambadaContext context)
         {
             try
@@ -44,6 +49,7 @@ namespace APILambada.Controllers
         }
         [Route("")]
         [HttpPost]
+        [Authorize(Roles ="Gerente")]
         public async Task<ActionResult<Usuarios>> CadastraUsuario([FromServices]LambadaContext context, [FromBody]Usuarios model)
         {
             if (!ModelState.IsValid)
@@ -65,6 +71,7 @@ namespace APILambada.Controllers
         }
         [Route("{id:int}")]
         [HttpPut]
+        [Authorize(Roles ="Gerente")]
         public async Task<ActionResult<Usuarios>> AtualizarUsuario(int id, [FromServices]LambadaContext context, [FromBody]Usuarios model)
         {
             if (model.Id != id)
@@ -91,6 +98,7 @@ namespace APILambada.Controllers
         }
         [Route("{id:int}")]
         [HttpDelete]
+        [Authorize(Roles ="Gerente")]
         public async Task<ActionResult<String>> DeletaUsuario(int id, [FromServices]LambadaContext context)
         {
             try
@@ -110,6 +118,28 @@ namespace APILambada.Controllers
                 return BadRequest(new { message = "Não foi possivel deletar o usuario" });
             }
 
+
+
+        }
+        [Route("login")]
+        [HttpPost]
+        
+        public async Task<ActionResult<dynamic>>Login([FromBody]Usuarios user, [FromServices]LambadaContext context)
+        {
+            var usuario = await context.Usuarios.AsNoTracking().Where(x =>x.Id==user.Id && x.Nome == user.Nome && x.Senha == user.Senha).FirstOrDefaultAsync();
+            if (usuario == null)
+            {
+                return BadRequest(new { message = "Usuario inválido" });
+            }
+            var token =TokenService.GenerateToken(usuario);
+
+            usuario.Senha = "";
+
+            return new
+            {
+                usuario = usuario,
+                token = token
+            };
 
 
         }
